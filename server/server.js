@@ -1,19 +1,20 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const patientsRouter = require("./routes/patients");
-const treatmentsRouter = require("./routes/treatments");
-
+const { graphqlHTTP } = require("express-graphql");
+const schema = require("./schema");
 //cors for sharing data between two different origins.
 app.use(cors());
 //for handling json data middleware.
 app.use(express.json());
 
-//route for patients api
-app.use("/patients", patientsRouter);
-
-//route for treatments api
-app.use("/treatments", treatmentsRouter);
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema,
+    graphiql: true,
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("Api is working");
